@@ -1,0 +1,283 @@
+/* ============================================================
+   journal.css — category rail, post cards, likes, comments
+   ============================================================ */
+
+/* ======================= category rail ===================== */
+
+.catrail {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 26px;
+  padding-bottom: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.catrail::-webkit-scrollbar { display: none; }
+
+.catrail .chip { display: inline-flex; align-items: center; gap: 8px; }
+.catrail .chip em {
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: .6;
+}
+
+/* ========================= the feature ===================== */
+
+.feature {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 0;
+  margin-bottom: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--r4);
+  background: var(--card);
+  box-shadow: var(--sh-2);
+  overflow: hidden;
+}
+.feature__art {
+  position: relative;
+  /* A definite aspect-ratio (not min-height) is what actually makes
+     width:100%;height:100% below work — a CSS grid row with no
+     grid-template-rows sizes itself from its content's *own* intrinsic
+     size before stretch is applied, so a min-height alone can still let a
+     large source photo's native dimensions inflate the whole row. */
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(150deg, var(--tone-deep), var(--ink));
+  overflow: hidden;
+}
+.feature__art img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 1.1s var(--ease);
+}
+.feature:hover .feature__art img { transform: scale(1.05); }
+
+.feature__body {
+  padding: 34px 34px 28px;
+  display: flex;
+  flex-direction: column;
+}
+.feature__body h3 {
+  margin: 14px 0 12px;
+  font-size: 30px;
+  letter-spacing: -.032em;
+  line-height: 1.12;
+}
+.feature__body h3 a { transition: color var(--fast); }
+.feature__body h3 a:hover { color: var(--signal); }
+.feature__body > p {
+  color: var(--dim);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+/* ========================= post grid ======================= */
+
+.postgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.postcard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--r3);
+  background: var(--card);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+  animation: statIn .5s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+  transition: transform var(--med), box-shadow var(--med), border-color var(--med);
+}
+.postcard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-2);
+  border-color: rgba(15,33,28,.18);
+}
+
+.postcard__art {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(150deg, var(--tone), var(--ink));
+  overflow: hidden;
+}
+.postcard__art img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .9s var(--ease);
+}
+.postcard:hover .postcard__art img { transform: scale(1.06); }
+
+/* category gradients — the fallback when an image is missing */
+.art--city     { background: linear-gradient(150deg, #2E7C6C, #0F211C); }
+.art--music    { background: linear-gradient(150deg, #D6265E, #4A0F26); }
+.art--essays   { background: linear-gradient(150deg, #E4A93B, #6B3B0F); }
+.art--interviews { background: linear-gradient(150deg, #3C6E9E, #10243A); }
+.art--food     { background: linear-gradient(150deg, #B7523F, #3A130D); }
+.art--archive  { background: linear-gradient(150deg, #6B7A8F, #1B2430); }
+
+.catmark {
+  position: absolute;
+  left: 14px; top: 14px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(6px);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.postcard__body { padding: 20px 20px 0; flex: 1; }
+.postcard__meta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  margin-bottom: 10px;
+}
+.postcard__meta span + span::before { content: "·"; margin-right: 9px; }
+
+.postcard h4 {
+  font-size: 19px;
+  line-height: 1.25;
+  letter-spacing: -.024em;
+  margin-bottom: 9px;
+}
+.postcard h4 a { transition: color var(--fast); }
+.postcard h4 a:hover { color: var(--signal); }
+.postcard__dek {
+  color: var(--dim);
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.byline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.byline b { font-weight: 600; }
+.byline span { color: var(--dimmer); font-size: 12.5px; }
+
+/* ===================== actions: like, reply ================ */
+
+.postacts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px;
+  margin-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.act {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: var(--dim);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background var(--fast), color var(--fast);
+}
+.act:hover { background: var(--paper); color: var(--ink); }
+.act svg { transition: transform var(--fast); }
+.act:hover svg { transform: scale(1.12); }
+
+.act--like.is-on { color: var(--signal); }
+.act--like.is-on svg { fill: var(--signal); animation: pop .38s var(--ease); }
+@keyframes pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+.act--read { margin-left: auto; color: var(--tone-deep); font-weight: 600; }
+
+/* ====================== comment threads ==================== */
+
+.thread {
+  display: none;
+  padding: 4px 20px 20px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--paper);
+}
+.thread.is-on { display: block; animation: swapIn .35s var(--ease) both; }
+@keyframes swapIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.comment {
+  display: flex;
+  gap: 11px;
+  padding: 15px 0;
+}
+.comment + .comment { border-top: 1px solid var(--line-soft); }
+.comment__who {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-bottom: 3px;
+}
+.comment__who b { font-family: var(--display); font-size: 14px; font-weight: 600; }
+.comment__who time { font-family: var(--mono); font-size: 11px; color: var(--dimmer); }
+.comment p { margin: 0; font-size: 14px; color: #2B3B36; line-height: 1.55; }
+
+.replybox {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+.replybox input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 18px;
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  background: var(--card);
+  font-size: 14px;
+  transition: border-color var(--fast), box-shadow var(--fast);
+}
+.replybox input:focus {
+  outline: none;
+  border-color: rgba(46,124,108,.5);
+  box-shadow: 0 0 0 4px rgba(46,124,108,.1);
+}
+.replybox button {
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  flex: none;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tone);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--fast), transform var(--fast);
+}
+.replybox button:hover { background: var(--tone-deep); transform: scale(1.06); }

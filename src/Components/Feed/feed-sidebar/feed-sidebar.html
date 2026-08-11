@@ -1,0 +1,73 @@
+<aside class="feedrail">
+  <div class="railcard">
+    <h5><svg width="14" height="14"><use href="#i-star"/></svg> Suggested for you</h5>
+    <div class="railcard__body">
+      @for (post of suggested(); track post.id) {
+        <a class="sugg" [routerLink]="['/post', post.id]">
+          <span class="sugg__art" [class]="'art--' + slug(post.categoryName)">
+            @if (post.coverImagePath) {
+              <img [src]="post.coverImagePath" alt="" loading="lazy">
+            }
+          </span>
+          <span class="sugg__body">
+            <b>{{ post.title }}</b>
+            <small>{{ post.authorName }} · {{ post.categoryName }}</small>
+          </span>
+        </a>
+      } @empty {
+        <p class="eyebrow">Nothing to suggest yet.</p>
+      }
+    </div>
+  </div>
+
+  <div class="railcard">
+    <h5><svg width="14" height="14"><use href="#i-eye"/></svg> Most viewed</h5>
+    <div class="railcard__body">
+      @for (post of mostViewed(); track post.id; let i = $index) {
+        <a class="metric" [routerLink]="['/post', post.id]">
+          <em>{{ (i + 1).toString().padStart(2, '0') }}</em>
+          <span class="metric__body">
+            <b>{{ post.title }}</b>
+            <span class="metric__bar"><i [style.width.%]="barWidth(post.viewCount, mostViewed(), 'viewCount')"></i></span>
+            <small>{{ post.viewCount.toLocaleString() }} reads · {{ post.categoryName }}</small>
+          </span>
+        </a>
+      } @empty {
+        <p class="eyebrow">Nothing published yet.</p>
+      }
+    </div>
+  </div>
+
+  <div class="railcard">
+    <h5><svg width="14" height="14"><use href="#i-heart"/></svg> Most liked</h5>
+    <div class="railcard__body">
+      @for (post of mostLiked(); track post.id; let i = $index) {
+        <a class="metric metric--liked" [routerLink]="['/post', post.id]">
+          <em>{{ (i + 1).toString().padStart(2, '0') }}</em>
+          <span class="metric__body">
+            <b>{{ post.title }}</b>
+            <span class="metric__bar"><i [style.width.%]="barWidth(post.likesCount, mostLiked(), 'likesCount')"></i></span>
+            <small><svg width="12" height="12"><use href="#i-heart"/></svg> {{ post.likesCount }} likes · {{ post.categoryName }}</small>
+          </span>
+        </a>
+      } @empty {
+        <p class="eyebrow">Nothing published yet.</p>
+      }
+    </div>
+  </div>
+
+  <div class="railcard">
+    <h5><svg width="14" height="14"><use href="#i-tag"/></svg> Topics</h5>
+    <div class="railtopics">
+      @for (topic of topics(); track topic.id) {
+        <a class="chip" [routerLink]="['/journal']" [queryParams]="{ cat: topic.id }">{{ topic.name }}</a>
+      }
+    </div>
+  </div>
+
+  <div class="railcta">
+    <h5>Have something to say?</h5>
+    <p>Draft it in the newsroom and take it to a desk. Your feed is where readers find it first.</p>
+    <a class="btn btn--signal btn--sm" routerLink="/compose"><svg width="15" height="15"><use href="#i-edit"/></svg> Start writing</a>
+  </div>
+</aside>

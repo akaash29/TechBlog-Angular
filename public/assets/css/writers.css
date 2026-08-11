@@ -1,0 +1,92 @@
+/* ============================================================
+   writers.css — the contributor table
+   ============================================================ */
+
+.tablewrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+thead th {
+  padding: 15px 22px;
+  text-align: left;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--line-soft);
+  transition: background var(--fast);
+  animation: rowIn .4s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+tbody tr:last-child { border-bottom: 0; }
+tbody tr:hover { background: var(--paper); }
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+tbody td {
+  padding: 14px 22px;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.who b {
+  display: block;
+  font-family: var(--display);
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -.012em;
+}
+.who span {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--dimmer);
+}
+
+td.num {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.rowacts {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity var(--fast);
+}
+tr:hover .rowacts, tr:focus-within .rowacts { opacity: 1; }
+
+.rowbtn {
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--dim);
+  cursor: pointer;
+  transition: all var(--fast);
+}
+.rowbtn:hover { color: var(--ink); border-color: rgba(15,33,28,.24); transform: translateY(-1px); }
+.rowbtn--send:hover { color: var(--tone-deep); border-color: rgba(46,124,108,.4); }

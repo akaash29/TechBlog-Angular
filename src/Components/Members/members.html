@@ -1,0 +1,100 @@
+<header class="topbar">
+  <h2>Members</h2>
+  <div class="searchbar">
+    <svg width="17" height="17"><use href="#i-search"/></svg>
+    <input type="search" placeholder="Search posts, writers, tags">
+  </div>
+  <div class="topbar__right">
+    <button class="iconbtn" aria-label="Notifications"><svg width="19" height="19"><use href="#i-bell"/></svg><span class="dot"></span></button>
+    <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> Write a post</button>
+  </div>
+</header>
+
+<section class="page" data-page="members">
+  <div class="page__head">
+    <div>
+      <h3>Members</h3>
+      <p><span>{{ totalCount() }}</span> people on Longwave.</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="searchbar" style="margin:0;max-width:300px">
+      <svg width="17" height="17"><use href="#i-search"/></svg>
+      <input
+        type="search"
+        placeholder="Search by name or handle"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="onSearchInput($event)"
+      >
+    </div>
+    <div class="chips">
+      <button type="button" class="chip" [class.is-on]="activeRole() === null" (click)="selectRole(null)">All</button>
+      @for (role of roles; track role) {
+        <button type="button" class="chip" [class.is-on]="activeRole() === role" (click)="selectRole(role)">{{ role }}s</button>
+      }
+    </div>
+  </div>
+
+  <div class="card" style="overflow:hidden">
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Member</th><th>Role</th><th>Based in</th><th>Status</th><th>Joined</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (member of members(); track member.id) {
+            <tr>
+              <td>
+                <div class="byline">
+                  <span class="presence" [class.presence--on]="isOnline(member.id)">
+                    @if (member.profileImagePath) {
+                      <img class="av av--sm av--img" [src]="member.profileImagePath" alt="">
+                    } @else {
+                      <span class="av av--sm" style="background:#D6265E">{{ initials(member) }}</span>
+                    }
+                  </span>
+                  <span>
+                    <b>{{ member.firstName }} {{ member.lastName }}</b><br>
+                    <small class="mono">&#64;{{ member.userName }}</small>
+                  </span>
+                </div>
+              </td>
+              <td><span class="badge" [class]="roleBadgeClass(member.role)">{{ member.role }}</span></td>
+              <td>{{ member.city || '—' }}</td>
+              <td>
+                <span class="status" [class.status--on]="isOnline(member.id)" [class.status--off]="!isOnline(member.id)">
+                  {{ isOnline(member.id) ? 'Online now' : (member.isActive ? 'Active' : 'Inactive') }}
+                </span>
+              </td>
+              <td>{{ member.createdAt | date:'MMM y' }}</td>
+              <td>
+                <a class="btn btn--ghost btn--sm" [routerLink]="['/messages']" [queryParams]="{ to: member.id }">
+                  <svg width="15" height="15"><use href="#i-chat"/></svg> Message
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (loading()) {
+      <div class="empty"><h4>Loading members…</h4></div>
+    } @else if (!members().length) {
+      <div class="empty">
+        <h4>No members match that search</h4>
+        <p style="margin:0">Try a different name, or clear the role filter.</p>
+      </div>
+    }
+  </div>
+
+  @if (totalCount() > 20) {
+    <div class="toolbar" style="justify-content:flex-end;margin-top:16px">
+      <button type="button" class="btn btn--ghost btn--sm" [disabled]="page() <= 1" (click)="previousPage()">Previous</button>
+      <button type="button" class="btn btn--ghost btn--sm" [disabled]="page() * 20 >= totalCount()" (click)="nextPage()">Next</button>
+    </div>
+  }
+</section>

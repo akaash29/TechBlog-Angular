@@ -1,0 +1,187 @@
+/* Most styling comes from the global theme (public/assets/css/messages.css).
+   The two dialogs below (attach a file, record a voice note) are new UI
+   the vendored design never had, so they get their own rules here — same
+   visual language (see image-upload-dialog.css) as the existing app-wide
+   upload dialog, just under a different class prefix. */
+
+:host {
+  display: contents;
+}
+
+.mdlg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 33, 28, 0.5);
+  animation: mdlg-fade 0.2s var(--ease);
+}
+
+@keyframes mdlg-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mdlg-dialog {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: var(--r3);
+  box-shadow: var(--sh-3);
+  padding: 20px;
+  animation: mdlg-pop 0.22s var(--ease);
+}
+
+@keyframes mdlg-pop {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.mdlg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.mdlg-head h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--ink);
+}
+.mdlg-close {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--dimmer);
+  cursor: pointer;
+  transition: background var(--fast), color var(--fast);
+}
+.mdlg-close:hover { background: var(--paper-2); color: var(--ink); }
+
+.mdlg-hint {
+  margin: 6px 0 16px;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.mdlg-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 16px;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--r2);
+  color: var(--dim);
+  font-size: 13.5px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--fast), background var(--fast), color var(--fast);
+}
+.mdlg-drop:hover, .mdlg-drop--active {
+  border-color: var(--tone);
+  background: var(--tone-soft);
+  color: var(--tone-deep);
+}
+
+.mdlg-file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  background: var(--paper);
+}
+.mdlg-file b { display: block; font-size: 13.5px; }
+.mdlg-file span { font-family: var(--mono); font-size: 11px; color: var(--dimmer); }
+
+.mdlg-error {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: var(--signal);
+}
+
+.mdlg-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* voice recorder */
+.mdlg-record {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 16px;
+}
+.mdlg-record__dot {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--signal-soft);
+  color: var(--signal);
+  border: 0;
+  cursor: pointer;
+  transition: transform var(--fast), background var(--fast);
+}
+.mdlg-record__dot:hover { transform: scale(1.06); }
+.mdlg-record__dot.is-recording {
+  background: var(--signal);
+  color: #fff;
+  animation: mdlg-pulse 1.4s infinite;
+}
+@keyframes mdlg-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(214,38,94,.35); }
+  50% { box-shadow: 0 0 0 12px rgba(214,38,94,0); }
+}
+.mdlg-record__time {
+  font-family: var(--mono);
+  font-size: 20px;
+  letter-spacing: .04em;
+  color: var(--ink);
+}
+.mdlg-record__hint { font-size: 13px; color: var(--dim); margin: 0; text-align: center; }
+
+/* new-conversation popover */
+.mdlg-searchresults {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mdlg-searchresults li button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--r2);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--fast);
+}
+.mdlg-searchresults li button:hover { background: var(--paper); }
+.mdlg-searchresults b { display: block; font-size: 13.5px; }
+.mdlg-searchresults small { font-family: var(--mono); font-size: 10.5px; color: var(--dimmer); }

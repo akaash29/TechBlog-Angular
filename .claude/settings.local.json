@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npx ng build --configuration development 2>&1)",
+      "PowerShell(dotnet build \"D:\\\\Blog Project 2026\\\\User API Dot net Core\\\\UserRegistration\\\\UserRegistration.sln\" 2>&1)",
+      "PowerShell(dotnet build \"D:\\\\Blog Project 2026\\\\User API Dot net Core\\\\UserRegistration\\\\UserRegistration\\\\UserRegistration.csproj\" 2>&1)",
+      "PowerShell(curl.exe -k -s -o - -w \"`nSTATUS:%{http_code}`n\" -X POST \"https://localhost:44308/api/users/register\" -H \"Content-Type: application/json\" -H \"Origin: http://localhost:4200\" -d '{\"UserName\":\"testuser123\",\"FirstName\":\"Test\",\"LastName\":\"User\",\"Email\":\"testuser123@example.com\",\"Role\":\"Writer\",\"Password\":\"Passw0rd1\"}')",
+      "Read(//d/Blog Project 2026/User API Dot net Core/UserRegistration/**)",
+      "Read(//d/Blog Project 2026/**)",
+      "PowerShell(Get-Content \"$env:TEMP\\\\testout.txt\" | Select-Object -Skip 2490 -First 80)",
+      "PowerShell(Get-Process -Name \"iisexpress\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Content \"$env:TEMP\\\\testout4.txt\" | Select-String -Pattern \"Failed UserRegistration\" -Context 0,8)",
+      "PowerShell(Get-Content \"$env:TEMP\\\\testout4.txt\" | Select-String -Pattern \"Unhandled exception|fail:\" -Context 0,15 | Select-Object -First 60)",
+      "PowerShell(Stop-Process -Id 2936 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Process -Name \"UserRegistration\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(& \"C:\\\\Users\\\\Akash\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Blog-Project-2026-User-Angular-UserBlog-Angular\\\\efe347b3-547a-44f1-ba6e-be4aeac6f3de\\\\scratchpad\\\\seed-dummy-posts.ps1\")",
+      "PowerShell(Stop-Process -Id 28600 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(dotnet tool list --global 2>$null)",
+      "PowerShell(dotnet ef --version 2>$null)",
+      "PowerShell(Get-Process | Where-Object { $_.ProcessName -match \"iisexpress|UserRegistration\" } | Select-Object Id, ProcessName)",
+      "PowerShell(Stop-Process -Id 22636 -Force -Confirm:$false; Stop-Process -Id 14284 -Force -Confirm:$false; Start-Sleep -Seconds 1; Get-Process | Where-Object { $_.ProcessName -match \"iisexpress\" } | Select-Object Id, ProcessName)"
+    ],
+    "additionalDirectories": [
+      "D:\\Blog Project 2026\\User API Dot net Core\\UserRegistration\\UserRegistration",
+      "D:\\Blog Project 2026\\User API Dot net Core\\UserRegistration\\UserRegistration.IntegrationTests\\Infrastructure",
+      "D:\\Blog Project 2026\\User API Dot net Core\\UserRegistration\\UserRegistration.IntegrationTests\\Controllers",
+      "D:\\Blog Project 2026\\User API Dot net Core\\UserRegistration\\UserRegistration.Infrastructure",
+      "D:\\Blog Project 2026\\User API Dot net Core\\UserRegistration\\.github\\workflows",
+      "D:\\Blog Project 2026\\User API Dot net Core\\UserRegistration"
+    ]
+  }
+}

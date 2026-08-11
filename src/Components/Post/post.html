@@ -1,0 +1,166 @@
+<header class="topbar">
+  <h2>{{ post()?.categoryName ?? 'Reading' }}</h2>
+  <div class="searchbar">
+    <svg width="17" height="17"><use href="#i-search"/></svg>
+    <input type="search" placeholder="Search posts, writers, tags">
+  </div>
+  <div class="topbar__right">
+    <button class="iconbtn" aria-label="Notifications"><svg width="19" height="19"><use href="#i-bell"/></svg><span class="dot"></span></button>
+    <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> Write a post</button>
+  </div>
+</header>
+
+<section class="page" data-page="post">
+  <a class="backlink" routerLink="/journal"><svg width="13" height="13"><use href="#i-arrow"/></svg> Back to the Journal</a>
+
+  @if (loading()) {
+    <div class="card"><p style="margin:0">Loading…</p></div>
+  } @else if (notFound() || !post()) {
+    <div class="card empty">
+      <h4>This post couldn't be found</h4>
+      <p style="margin:0">It may have been unpublished, or the link is wrong.</p>
+    </div>
+  } @else if (post(); as p) {
+    <div class="readgrid">
+      <div>
+        <article class="article">
+          <div class="article__art" [class]="'art--' + slug(p.categoryName)">
+            @if (p.coverImagePath) {
+              <img [src]="p.coverImagePath" [alt]="p.title">
+            }
+          </div>
+          <div class="article__head">
+            <span class="onair">{{ p.categoryName }}</span>
+            <h1>{{ p.title }}</h1>
+            <p class="article__dek">{{ p.description }}</p>
+            <div class="article__by">
+              @if (p.authorProfileImagePath) {
+                <img class="av av--img" [src]="p.authorProfileImagePath" alt="">
+              } @else {
+                <span class="av" style="background:#D6265E">{{ initials(p.authorName) }}</span>
+              }
+              <span><b>{{ p.authorName }}</b><span>{{ p.createdDate | date:'MMM d, y' }} · {{ p.viewCount.toLocaleString() }} reads</span></span>
+            </div>
+          </div>
+          <div class="prose" [innerHTML]="p.postHtml"></div>
+          <div class="article__foot">
+            <button
+              type="button"
+              class="act act--like"
+              [class.is-on]="liked()"
+              [attr.aria-pressed]="liked()"
+              [disabled]="liking()"
+              (click)="onLike()"
+            >
+              <svg width="17" height="17"><use href="#i-heart"/></svg><span>{{ p.likesCount }}</span>
+            </button>
+            <span class="act"><svg width="17" height="17"><use href="#i-chat"/></svg><span>{{ p.commentsCount }}</span></span>
+          </div>
+        </article>
+
+        <section class="comments">
+          <div class="comments__head">
+            <h4>Comments</h4>
+            <span class="eyebrow"><span>{{ comments().length }}</span> so far</span>
+          </div>
+          <div class="comments__body">
+            @for (comment of comments(); track comment.id) {
+              <div class="comment">
+                @if (comment.authorProfileImagePath) {
+                  <img class="av av--sm av--img" [src]="comment.authorProfileImagePath" alt="">
+                } @else {
+                  <span class="av av--sm" style="background:#D6265E">{{ initials(comment.authorName) }}</span>
+                }
+                <div style="flex:1">
+                  <div class="comment__who">
+                    <b>{{ comment.authorName }}</b>
+                    <time>{{ comment.createdDate | date:'MMM d, y, h:mm a' }}@if (comment.updatedDate) { <span> (edited)</span>}</time>
+                  </div>
+
+                  @if (editingCommentId() === comment.id) {
+                    <textarea
+                      class="replybox__input"
+                      rows="2"
+                      style="width:100%;resize:vertical"
+                      [ngModel]="editingText()"
+                      (ngModelChange)="editingText.set($event)"
+                    ></textarea>
+                    <div style="display:flex;gap:8px;margin-top:6px">
+                      <button type="button" class="btn btn--signal btn--sm" [disabled]="!editingText().trim() || savingCommentId() === comment.id" (click)="saveEditedComment(comment)">Save</button>
+                      <button type="button" class="btn btn--ghost btn--sm" (click)="cancelEditingComment()">Cancel</button>
+                    </div>
+                  } @else {
+                    <p>{{ comment.commentText }}</p>
+                    @if (canModify(comment)) {
+                      <div style="display:flex;gap:14px">
+                        <button type="button" class="link" style="cursor:pointer;border:0;background:none;padding:0" (click)="startEditingComment(comment)">Edit</button>
+                        <button type="button" class="link" style="cursor:pointer;border:0;background:none;padding:0" (click)="deleteComment(comment)">Delete</button>
+                      </div>
+                    }
+                  }
+                </div>
+              </div>
+            } @empty {
+              <p style="padding:16px 0 4px;color:var(--dim);font-size:14px">No comments yet. Start the conversation.</p>
+            }
+
+            @if (isLoggedIn()) {
+              <form class="replybox" (ngSubmit)="submitComment()">
+                <input
+                  type="text"
+                  placeholder="Write a comment"
+                  aria-label="Write a comment"
+                  [ngModel]="newCommentText()"
+                  (ngModelChange)="newCommentText.set($event)"
+                  name="newComment"
+                >
+                <button type="submit" aria-label="Post comment" [disabled]="!newCommentText().trim() || postingComment()">
+                  <svg width="17" height="17"><use href="#i-send"/></svg>
+                </button>
+              </form>
+            } @else {
+              <button type="button" class="btn btn--primary btn--sm" style="margin-top:8px" (click)="goToLogin()">
+                <svg width="16" height="16"><use href="#i-lock"/></svg> Login to add comment
+              </button>
+            }
+          </div>
+        </section>
+      </div>
+
+      <aside class="rail">
+        <div class="railcard">
+          <h5>Sections</h5>
+          <div class="railcats">
+            @for (cat of categories(); track cat.id) {
+              <a class="chip" [routerLink]="['/journal']" [queryParams]="{ cat: cat.id }">{{ cat.name }}</a>
+            }
+          </div>
+        </div>
+
+        <div class="railcard">
+          <h5>Most read</h5>
+          <div class="railcard__body">
+            @for (q of mostRead(); track q.id; let i = $index) {
+              <a class="rankrow" [routerLink]="['/post', q.id]">
+                <em>{{ (i + 1).toString().padStart(2, '0') }}</em>
+                <span><b>{{ q.title }}</b><small>{{ q.viewCount.toLocaleString() }} reads · {{ q.categoryName }}</small></span>
+              </a>
+            }
+          </div>
+        </div>
+
+        <div class="railcard">
+          <h5>Most discussed</h5>
+          <div class="railcard__body">
+            @for (q of mostDiscussed(); track q.id; let i = $index) {
+              <a class="rankrow" [routerLink]="['/post', q.id]">
+                <em>{{ (i + 1).toString().padStart(2, '0') }}</em>
+                <span><b>{{ q.title }}</b><small>{{ q.commentsCount }} comments · {{ q.likesCount }} likes</small></span>
+              </a>
+            }
+          </div>
+        </div>
+      </aside>
+    </div>
+  }
+</section>

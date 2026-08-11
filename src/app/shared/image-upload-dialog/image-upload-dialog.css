@@ -1,0 +1,132 @@
+:host {
+  display: contents;
+}
+
+.iud-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 33, 28, 0.5);
+  animation: iud-fade 0.2s var(--ease);
+}
+
+@keyframes iud-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.iud-dialog {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: var(--r3);
+  box-shadow: var(--sh-3);
+  padding: 20px;
+  animation: iud-pop 0.22s var(--ease);
+}
+
+@keyframes iud-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.iud-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.iud-head h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.iud-close {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--dimmer);
+  cursor: pointer;
+  transition: background var(--fast), color var(--fast);
+}
+.iud-close:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.iud-hint {
+  margin: 6px 0 16px;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.iud-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 16px;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--r2);
+  color: var(--dim);
+  font-size: 13.5px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--fast), background var(--fast), color var(--fast);
+}
+.iud-drop:hover,
+.iud-drop--active {
+  border-color: var(--tone);
+  background: var(--tone-soft);
+  color: var(--tone-deep);
+}
+
+.iud-preview {
+  border-radius: var(--r2);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  max-height: 220px;
+  display: flex;
+}
+.iud-preview img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+}
+
+.iud-error {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: var(--signal);
+}
+
+.iud-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}

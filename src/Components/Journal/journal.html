@@ -1,0 +1,101 @@
+<header class="topbar">
+  <h2>The Journal</h2>
+  <div class="searchbar">
+    <svg width="17" height="17"><use href="#i-search"/></svg>
+    <input type="search" placeholder="Search posts, writers, tags">
+  </div>
+  <div class="topbar__right">
+    <button class="iconbtn" aria-label="Notifications"><svg width="19" height="19"><use href="#i-bell"/></svg><span class="dot"></span></button>
+    <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> Write a post</button>
+  </div>
+</header>
+
+<section class="page" data-page="blog">
+  <div class="page__head">
+    <div>
+      <h3>The Journal</h3>
+      <p>Everything Longwave has published, newest first. <span>{{ totalCount() }}</span> posts.</p>
+    </div>
+    <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> Write a post</button>
+  </div>
+
+  <div class="catrail">
+    <button type="button" class="chip" [class.is-on]="activeCategoryId() === null" (click)="selectCategory(null)">
+      All
+    </button>
+    @for (cat of categories(); track cat.id) {
+      <button type="button" class="chip" [class.is-on]="activeCategoryId() === cat.id" (click)="selectCategory(cat.id)">
+        {{ cat.name }}
+      </button>
+    }
+  </div>
+
+  @if (leadPost(); as lead) {
+    <article class="feature">
+      <a class="feature__art" [class]="'art--' + slug(lead.categoryName)" [routerLink]="['/post', lead.id]" [attr.aria-label]="lead.title">
+        @if (lead.coverImagePath) {
+          <img [src]="lead.coverImagePath" alt="">
+        }
+        <span class="catmark">{{ lead.categoryName }}</span>
+      </a>
+      <div class="feature__body">
+        <span class="onair">Lead story</span>
+        <h3><a [routerLink]="['/post', lead.id]">{{ lead.title }}</a></h3>
+        <p>{{ lead.description }}</p>
+        <div class="byline" style="margin-top:auto">
+          @if (lead.authorProfileImagePath) {
+            <img class="av av--img" [src]="lead.authorProfileImagePath" alt="">
+          } @else {
+            <span class="av" style="background:#D6265E">{{ initials(lead.authorName) }}</span>
+          }
+          <span><b>{{ lead.authorName }}</b><br><span>{{ lead.createdDate | date:'MMM d, y' }}</span></span>
+        </div>
+      </div>
+    </article>
+  }
+
+  @if (loading()) {
+    <div class="card"><p style="margin:0">Loading…</p></div>
+  } @else if (!leadPost() && !gridPosts().length) {
+    <div class="card empty">
+      <h4>Nothing published in this section yet</h4>
+      <p style="margin:0">Pick another category, or be the first to write one.</p>
+    </div>
+  }
+
+  <div class="postgrid">
+    @for (post of gridPosts(); track post.id) {
+      <article class="postcard">
+        <a class="postcard__art" [class]="'art--' + slug(post.categoryName)" [routerLink]="['/post', post.id]" [attr.aria-label]="post.title">
+          @if (post.coverImagePath) {
+            <img [src]="post.coverImagePath" alt="" loading="lazy">
+          }
+          <span class="catmark">{{ post.categoryName }}</span>
+        </a>
+        <div class="postcard__body">
+          <div class="postcard__meta"><span>{{ post.createdDate | date:'MMM d, y' }}</span></div>
+          <h4><a [routerLink]="['/post', post.id]">{{ post.title }}</a></h4>
+          <p class="postcard__dek">{{ post.description }}</p>
+          <div class="byline">
+            @if (post.authorProfileImagePath) {
+              <img class="av av--sm av--img" [src]="post.authorProfileImagePath" alt="">
+            } @else {
+              <span class="av av--sm" style="background:#D6265E">{{ initials(post.authorName) }}</span>
+            }
+            <span><b>{{ post.authorName }}</b></span>
+          </div>
+        </div>
+        <div class="postacts">
+          <a class="act" [routerLink]="['/post', post.id]"><svg width="17" height="17"><use href="#i-heart"/></svg><span>{{ post.likesCount }}</span></a>
+          <a class="act" [routerLink]="['/post', post.id]"><svg width="17" height="17"><use href="#i-chat"/></svg><span>{{ post.commentsCount }}</span></a>
+          <a class="act act--read" [routerLink]="['/post', post.id]">Read <svg width="15" height="15"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+    }
+  </div>
+
+  <div #sentinel aria-hidden="true"></div>
+  @if (loadingMore()) {
+    <p class="eyebrow" style="text-align:center">Loading more…</p>
+  }
+</section>

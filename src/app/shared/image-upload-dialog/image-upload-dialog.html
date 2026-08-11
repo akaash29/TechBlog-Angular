@@ -1,0 +1,48 @@
+@if (isOpen()) {
+  <div class="iud-overlay" (click)="cancel()">
+    <div class="iud-dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-label="Upload an image">
+      <div class="iud-head">
+        <h3>Upload an image</h3>
+        <button type="button" class="iud-close" aria-label="Cancel" (click)="cancel()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <p class="iud-hint">JPEG, PNG, GIF, or WEBP — up to {{ maxSizeLabel }}.</p>
+
+      @if (previewUrl(); as preview) {
+        <div class="iud-preview">
+          <img [src]="preview" alt="Selected image preview">
+        </div>
+      } @else {
+        <label
+          class="iud-drop"
+          [class.iud-drop--active]="isDragging()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($event)"
+        >
+          <input type="file" accept="image/jpeg,image/png,image/gif,image/webp" (change)="onFileInputChange($event)" hidden>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-4.5 4 3.5 3-2.5 4 3.5"/></svg>
+          <span>Click to choose a file, or drag one here</span>
+        </label>
+      }
+
+      @if (errorMessage(); as error) {
+        <p class="iud-error">{{ error }}</p>
+      }
+
+      <div class="iud-actions">
+        <button type="button" class="btn btn--ghost btn--sm" (click)="cancel()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn--primary btn--sm"
+          [disabled]="!selectedFile() || uploading()"
+          (click)="confirmUpload()"
+        >
+          {{ uploading() ? 'Uploading…' : 'Upload' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,27 @@
+@for (t of toastList(); track t.key) {
+  <div class="app-toast app-toast--{{ t.variant }}" role="status" aria-live="polite">
+    <span class="app-toast__icon">
+      @switch (t.variant) {
+        @case ('success') {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+        }
+        @case ('error') {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        }
+        @default {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v6M12 16.5h.01"/></svg>
+        }
+      }
+    </span>
+
+    <span class="app-toast__message">{{ t.message }}</span>
+
+    <button type="button" class="app-toast__close" aria-label="Dismiss" (click)="dismiss()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+
+    <div class="app-toast__track">
+      <div class="app-toast__bar" [style.animation-duration.ms]="t.duration"></div>
+    </div>
+  </div>
+}

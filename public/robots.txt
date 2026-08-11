@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /feed
+Disallow: /journal
+Disallow: /compose
+Disallow: /profile
+Disallow: /members
+Disallow: /insights
+
+Sitemap: /sitemap.xml

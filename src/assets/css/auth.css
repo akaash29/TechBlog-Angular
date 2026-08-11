@@ -1,0 +1,246 @@
+/* ============================================================
+   auth.css — the split screen: sign in / create account
+   ============================================================ */
+
+.auth {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  min-height: 100vh;
+}
+
+/* ====================== the dark stage ===================== */
+
+.auth__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 40px 46px 38px;
+  background: var(--ink);
+  color: #D8E2DC;
+  overflow: hidden;
+}
+.auth__stage::before {
+  content: "";
+  position: absolute;
+  inset: -30% -20% 30% -20%;
+  background:
+    radial-gradient(45% 55% at 25% 60%, rgba(46,124,108,.55), transparent 70%),
+    radial-gradient(40% 50% at 78% 30%, rgba(214,38,94,.32), transparent 70%);
+  filter: blur(40px);
+  animation: drift 22s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes drift {
+  from { transform: translate3d(-3%, 0, 0) scale(1); }
+  to   { transform: translate3d(4%, 4%, 0) scale(1.12); }
+}
+
+.auth__stage > * { position: relative; z-index: 1; }
+
+.stage__mid { max-width: 30ch; }
+.stage__mid h1 {
+  margin: 22px 0 20px;
+  color: #fff;
+}
+.stage__mid h1::after {
+  content: "";
+  display: block;
+  width: 62px; height: 4px;
+  margin-top: 24px;
+  border-radius: 99px;
+  background: var(--signal);
+}
+.stage__mid p {
+  color: rgba(216,226,220,.66);
+  font-size: 15.5px;
+  line-height: 1.65;
+  max-width: 42ch;
+}
+
+/* the signature: a live level meter along the floor of the stage */
+.stage__foot { display: flex; flex-direction: column; gap: 14px; }
+
+.levels {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 92px;
+}
+.levels i {
+  flex: 1;
+  min-height: 3px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, rgba(111,211,180,.95), rgba(46,124,108,.25));
+  transform-origin: bottom;
+  animation: bounce 1.6s var(--ease) infinite alternate;
+}
+.levels i:nth-child(4n) { background: linear-gradient(180deg, rgba(255,138,175,.9), rgba(214,38,94,.2)); }
+@keyframes bounce {
+  from { height: 8%; opacity: .55; }
+  to   { height: 100%; opacity: 1; }
+}
+
+.stage__dial { color: #D8E2DC; }
+
+.stage__scale {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(216,226,220,.42);
+}
+
+/* ======================== the panel ======================== */
+
+.auth__panel {
+  display: grid;
+  place-items: center;
+  padding: 44px 32px;
+  background: var(--paper);
+  background-image: radial-gradient(rgba(15,33,28,.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.authcard {
+  width: 100%;
+  max-width: 430px;
+  padding: 40px 38px 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--r4);
+  background: var(--card);
+  box-shadow: var(--sh-3);
+}
+
+.authswap { display: none; animation: swapIn .45s var(--ease) both; }
+.authswap.is-on { display: block; }
+@keyframes swapIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* branded header inside the card */
+.authcard__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+.authcard__mark {
+  flex: none;
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  border-radius: 13px;
+  color: var(--signal);
+  background: var(--signal-soft);
+  border: 1px solid rgba(214,38,94,.16);
+}
+.authcard__head .eyebrow { margin: 0; }
+
+.authcard h2 {
+  margin: 12px 0 6px;
+  font-size: 32px;
+  letter-spacing: -.032em;
+}
+.authcard__sub {
+  margin-bottom: 28px;
+  color: var(--dim);
+  font-size: 14.5px;
+}
+
+.swapline {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--dim);
+}
+
+/* the auth pages are dense; tighten the fields a touch */
+.authcard .field { margin-bottom: 17px; }
+
+/* ============================================================
+   register-only extras (these classes appear on register.html)
+   ============================================================ */
+
+/* "what you get" list on the stage */
+.stage__perks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin: 26px 0 0;
+  max-width: 40ch;
+}
+.stage__perks li {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: rgba(216,226,220,.86);
+}
+.stage__perks .tick {
+  flex: none;
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border-radius: 9px;
+  color: #6FD3B4;
+  background: rgba(111,211,180,.14);
+  border: 1px solid rgba(111,211,180,.24);
+}
+
+/* trust stats above the level meter */
+.stage__stats {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 4px;
+}
+.stage__stats div { display: flex; flex-direction: column; gap: 2px; }
+.stage__stats b {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: -.02em;
+}
+.stage__stats span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(216,226,220,.5);
+}
+
+/* light section labels inside the form */
+.authgroup__label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0 15px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.authgroup__label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.authgroup + .authgroup { margin-top: 24px; }
+
+/* reassurance line under the submit button */
+.formfine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 15px 0 0;
+  font-size: 12.5px;
+  color: var(--dim);
+}
+.formfine svg { flex: none; color: var(--tone); }

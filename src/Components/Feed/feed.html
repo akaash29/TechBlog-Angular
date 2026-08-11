@@ -1,0 +1,113 @@
+<header class="topbar">
+  <h2>Feed</h2>
+  <div class="searchbar">
+    <svg width="17" height="17"><use href="#i-search"/></svg>
+    <input type="search" placeholder="Search posts, writers, tags">
+  </div>
+  <div class="topbar__right">
+    <button class="iconbtn" aria-label="Notifications"><svg width="19" height="19"><use href="#i-bell"/></svg><span class="dot"></span></button>
+    <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> Write a post</button>
+  </div>
+</header>
+
+<section class="page" data-page="feed">
+  <div class="page__head">
+    <div>
+      <h3>Your feed</h3>
+      <p>Fresh from the desks you follow, with a few pieces from outside your beat that we think are worth your time.</p>
+    </div>
+    <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> Write a post</button>
+  </div>
+
+  <div class="feedtabs">
+    <button type="button" class="chip" [class.is-on]="activeTab() === 'foryou'" (click)="selectTab('foryou')">For you</button>
+    <button type="button" class="chip" [class.is-on]="activeTab() === 'latest'" (click)="selectTab('latest')">Latest</button>
+    <button type="button" class="chip" [class.is-on]="activeTab() === 'trending'" (click)="selectTab('trending')">Trending</button>
+  </div>
+
+  <div class="feedgrid">
+    <div class="feedmain">
+      @if (hero(); as h) {
+        <a class="fhero" [routerLink]="['/post', h.id]">
+          @if (h.coverImagePath) {
+            <img [src]="h.coverImagePath" [alt]="h.title">
+          }
+          <div class="fhero__body">
+            <span class="fhero__pick"><svg width="13" height="13"><use href="#i-star"/></svg> Top of your feed</span>
+            <span class="fhero__cat">{{ h.categoryName }}</span>
+            <h3>{{ h.title }}</h3>
+            <p>{{ h.description }}</p>
+            <div class="fhero__foot">
+              <span class="fhero__by">
+                @if (h.authorProfileImagePath) {
+                  <img class="av av--img" [src]="h.authorProfileImagePath" alt="">
+                } @else {
+                  <span class="av" style="background:#D6265E">{{ initials(h.authorName) }}</span>
+                }
+                <span><b>{{ h.authorName }}</b><small>{{ h.createdDate | date:'MMM d, y' }} · {{ h.viewCount }} reads</small></span>
+              </span>
+              <span class="fhero__stats">
+                <span><svg width="15" height="15"><use href="#i-eye"/></svg>{{ h.viewCount.toLocaleString() }}</span>
+                <span><svg width="15" height="15"><use href="#i-heart"/></svg>{{ h.likesCount }}</span>
+              </span>
+            </div>
+          </div>
+        </a>
+      }
+
+      @if (loading()) {
+        <div class="card"><p style="margin:0">Loading your feed…</p></div>
+      } @else if (!posts().length) {
+        <div class="card empty">
+          <h4>Nothing here yet</h4>
+          <p style="margin:0">Be the first to write something in this view.</p>
+        </div>
+      }
+
+      @for (post of posts(); track post.id) {
+        <article class="fcard">
+          <a class="fcard__art" [class]="'art--' + slug(post.categoryName)" [routerLink]="['/post', post.id]" [attr.aria-label]="post.title">
+            @if (post.coverImagePath) {
+              <img [src]="post.coverImagePath" alt="" loading="lazy">
+            }
+            <span class="catmark">{{ post.categoryName }}</span>
+          </a>
+          <div class="fcard__main">
+            <div class="fcard__meta">
+              @if (post.authorProfileImagePath) {
+                <img class="av av--sm av--img" [src]="post.authorProfileImagePath" alt="">
+              } @else {
+                <span class="av av--sm" style="background:#D6265E">{{ initials(post.authorName) }}</span>
+              }
+              <b>{{ post.authorName }}</b><time>{{ post.createdDate | date:'MMM d, y' }}</time>
+            </div>
+            <h4><a [routerLink]="['/post', post.id]">{{ post.title }}</a></h4>
+            <p class="fcard__dek">{{ post.description }}</p>
+            <div class="postacts">
+              <button
+                type="button"
+                class="act act--like"
+                [class.is-on]="isLiked(post.id)"
+                [attr.aria-pressed]="isLiked(post.id)"
+                (click)="onLike(post, $event)"
+              >
+                <svg width="17" height="17"><use href="#i-heart"/></svg><span>{{ post.likesCount }}</span>
+              </button>
+              <a class="act" [routerLink]="['/post', post.id]">
+                <svg width="17" height="17"><use href="#i-chat"/></svg><span>{{ post.commentsCount }}</span>
+              </a>
+              <a class="act act--read" [routerLink]="['/post', post.id]">Read <svg width="15" height="15"><use href="#i-arrow"/></svg></a>
+            </div>
+          </div>
+        </article>
+      }
+
+      <div #sentinel aria-hidden="true"></div>
+      @if (loadingMore()) {
+        <p class="eyebrow" style="text-align:center">Loading more…</p>
+      }
+    </div>
+
+    <app-feed-sidebar />
+  </div>
+</section>

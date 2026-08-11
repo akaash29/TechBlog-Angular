@@ -1,0 +1,238 @@
+/* ============================================================
+   post.css — the reading view
+   ============================================================ */
+
+.backlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color var(--fast), gap var(--fast);
+}
+.backlink svg { transform: rotate(180deg); }
+.backlink:hover { color: var(--signal); gap: 12px; }
+
+.readgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 312px;
+  gap: 34px;
+  align-items: start;
+}
+
+/* ========================= article ========================= */
+
+.article {
+  border: 1px solid var(--line);
+  border-radius: var(--r4);
+  background: var(--card);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+}
+
+.article__art {
+  position: relative;
+  aspect-ratio: 21 / 9;
+  background: linear-gradient(150deg, var(--tone-deep), var(--ink));
+}
+.article__art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.article__head { padding: 34px 44px 0; }
+.article__head h1 {
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -.036em;
+  margin: 14px 0 16px;
+}
+.article__dek {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #35473F;
+  margin-bottom: 24px;
+}
+
+.article__by {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.article__by b { display: block; font-family: var(--display); font-size: 15px; font-weight: 600; }
+.article__by span { font-family: var(--mono); font-size: 11.5px; color: var(--dimmer); }
+.article__by .btn { margin-left: auto; }
+
+/* prose */
+.prose { padding: 30px 44px 10px; }
+/* .prose > div: browsers that default to <div> for new paragraphs inside a
+   contenteditable (Chrome, without defaultParagraphSeparator forced to
+   "p" — see compose.js) produce plain, unstyled divs. Styling them the
+   same as <p> here means posts saved before that fix still read correctly
+   without needing to be re-edited and re-published. */
+.prose p,
+.prose > div {
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.72;
+  color: #2A3B35;
+  margin: 0 0 22px;
+  max-width: 68ch;
+}
+.prose p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--display);
+  font-size: 66px;
+  font-weight: 800;
+  line-height: .82;
+  padding: 6px 12px 0 0;
+  color: var(--signal);
+}
+.prose h3 {
+  font-size: 23px;
+  letter-spacing: -.026em;
+  margin: 34px 0 14px;
+}
+.prose blockquote {
+  margin: 30px 0;
+  padding: 4px 0 4px 26px;
+  border-left: 3px solid var(--signal);
+}
+.prose blockquote p {
+  font-size: 21px;
+  font-style: italic;
+  color: var(--ink);
+  margin: 0;
+}
+.prose ul { padding-left: 20px; margin: 0 0 22px; }
+.prose li {
+  font-family: var(--serif);
+  font-size: 17.5px;
+  line-height: 1.68;
+  color: #2A3B35;
+  margin-bottom: 8px;
+}
+
+/* Inline images inserted from the compose editor carry no size of their
+   own (see compose.js's insertImage) — without this, a large source photo
+   renders at its native pixel size and blows out the whole page width. */
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 26px auto;
+  border-radius: var(--r3);
+}
+
+.article__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 34px;
+  margin-top: 10px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--paper);
+  flex-wrap: wrap;
+}
+.article__foot .act--read { margin-left: auto; }
+
+/* comments under the article */
+.comments {
+  margin-top: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--r3);
+  background: var(--card);
+  box-shadow: var(--sh-1);
+}
+.comments__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.comments__body { padding: 6px 24px 22px; }
+.comments .replybox { padding-top: 18px; }
+
+/* =========================== rail ========================== */
+
+.rail {
+  position: sticky;
+  top: calc(var(--top-h) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.railcard {
+  border: 1px solid var(--line);
+  border-radius: var(--r3);
+  background: var(--card);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+}
+.railcard h5 {
+  padding: 16px 20px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  border-bottom: 1px solid var(--line-soft);
+}
+.railcard__body { padding: 8px 20px 16px; }
+
+.railcats { display: flex; flex-wrap: wrap; gap: 8px; padding: 16px 20px; }
+
+.rankrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 13px 0;
+}
+.rankrow + .rankrow { border-top: 1px solid var(--line-soft); }
+.rankrow em {
+  font-family: var(--display);
+  font-style: normal;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--paper-2);
+  line-height: 1;
+  width: 24px;
+  flex: none;
+}
+.rankrow b {
+  display: block;
+  font-family: var(--display);
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.32;
+  letter-spacing: -.014em;
+  transition: color var(--fast);
+}
+.rankrow a:hover b { color: var(--signal); }
+.rankrow small {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dimmer);
+}
+
+/* the rail's dark note: keep reading */
+.railcard--dark {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #E7EDE6;
+  padding: 24px 22px;
+}
+.railcard--dark h5 { padding: 0; border: 0; color: rgba(231,237,230,.5); }
+.railcard--dark p { margin: 10px 0 18px; font-size: 14px; color: rgba(231,237,230,.7); }

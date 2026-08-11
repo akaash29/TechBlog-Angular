@@ -1,0 +1,170 @@
+<header class="topbar">
+  <h2>Insights</h2>
+  <div class="searchbar">
+    <svg width="17" height="17"><use href="#i-search"/></svg>
+    <input type="search" placeholder="Search posts, writers, tags">
+  </div>
+  <div class="topbar__right">
+    <button class="iconbtn" aria-label="Notifications"><svg width="19" height="19"><use href="#i-bell"/></svg><span class="dot"></span></button>
+  </div>
+</header>
+
+<section class="page" data-page="insights">
+  <div class="page__head">
+    <div>
+      <h3>Site insights</h3>
+      <p>Traffic, audience, and on-page SEO health — admin only.</p>
+    </div>
+    <div class="feedtabs">
+      @for (r of ranges; track r.value) {
+        <button class="chip" [class.is-on]="selectedRange() === r.value" (click)="selectRange(r.value)">{{ r.label }}</button>
+      }
+    </div>
+  </div>
+
+  @if (summary(); as s) {
+    <div class="statstrip">
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-eye"/></svg></span>
+        <b>{{ s.totalVisits.toLocaleString() }}</b><span>Total visits</span>
+        <small>In the selected period</small>
+      </div>
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-users"/></svg></span>
+        <b>{{ s.uniqueVisitors.toLocaleString() }}</b><span>Unique visitors</span>
+        <small>Distinct sessions</small>
+      </div>
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-wave"/></svg></span>
+        <b>{{ s.activeNow.toLocaleString() }}</b><span>Active right now</span>
+        <small>Last 5 minutes · refreshes automatically</small>
+      </div>
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-clock"/></svg></span>
+        <b>{{ formatDuration(s.averageSessionDurationSeconds) }}</b><span>Avg. time per visit</span>
+        <small>Per session, selected period</small>
+      </div>
+    </div>
+
+    <div class="profgrid">
+      <div class="profgrid__main">
+        <div class="card">
+          <div class="card__head"><h4>Visits over time</h4><span class="eyebrow">{{ s.visitsOverTime.length }} day(s)</span></div>
+          <div class="card__body activity">
+            @if (s.visitsOverTime.length) {
+              <div class="spark">
+                @for (point of s.visitsOverTime; track point.date) {
+                  <i [style.height.%]="sparkBarHeightPercent(point, s.visitsOverTime)" [attr.title]="point.count + ' visits on ' + formatDate(point.date)"></i>
+                }
+              </div>
+              <div class="spark__days">
+                @for (point of s.visitsOverTime; track point.date) {
+                  <span>{{ formatDay(point.date) }}</span>
+                }
+              </div>
+            } @else {
+              <p class="insights-empty">No visits recorded yet for this period.</p>
+            }
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__head"><h4>Top pages</h4><span class="eyebrow">By visits</span></div>
+          <div class="card__body" style="padding-top:6px">
+            @if (s.topPages.length) {
+              @for (page of s.topPages; track page.path; let i = $index) {
+                <div class="metric">
+                  <em>{{ (i + 1).toString().padStart(2, '0') }}</em>
+                  <span class="metric__body">
+                    <b>{{ page.path }}</b>
+                    <span class="metric__bar"><i [style.width.%]="barWidthPercent(page.count, s.topPages)"></i></span>
+                    <small>{{ page.count.toLocaleString() }} visit{{ page.count === 1 ? '' : 's' }}</small>
+                  </span>
+                </div>
+              }
+            } @else {
+              <p class="insights-empty">No page visits yet.</p>
+            }
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__head"><h4>Devices</h4><span class="eyebrow">By visits</span></div>
+          <div class="card__body" style="padding-top:6px">
+            @if (s.visitsByDevice.length) {
+              @for (device of s.visitsByDevice; track device.device) {
+                <div class="metric">
+                  <span class="metric__body">
+                    <b>{{ device.device }}</b>
+                    <span class="metric__bar"><i [style.width.%]="barWidthPercent(device.count, s.visitsByDevice)"></i></span>
+                    <small>{{ device.count.toLocaleString() }} visit{{ device.count === 1 ? '' : 's' }}</small>
+                  </span>
+                </div>
+              }
+            } @else {
+              <p class="insights-empty">No device data yet.</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="profgrid__side">
+        <div class="card">
+          <div class="card__head"><h4>Visitors by country</h4><span class="eyebrow">{{ s.visitsByCountry.length }} countries</span></div>
+          <div class="card__body" style="padding-top:6px">
+            @if (s.visitsByCountry.length) {
+              @for (country of s.visitsByCountry; track country.country; let i = $index) {
+                <div class="metric">
+                  <em>{{ (i + 1).toString().padStart(2, '0') }}</em>
+                  <span class="metric__body">
+                    <b>{{ country.country }}</b>
+                    <span class="metric__bar"><i [style.width.%]="barWidthPercent(country.count, s.visitsByCountry)"></i></span>
+                    <small>{{ country.count.toLocaleString() }} visit{{ country.count === 1 ? '' : 's' }}</small>
+                  </span>
+                </div>
+              }
+            } @else {
+              <p class="insights-empty">No geolocated visits yet — local/dev traffic can't be geolocated.</p>
+            }
+          </div>
+        </div>
+
+        @if (seoReport(); as seo) {
+          <div class="card">
+            <div class="card__head">
+              <h4>SEO health</h4>
+              <span class="badge" [class.badge--writer]="seo.score >= 70" [class.badge--editor]="seo.score < 70">{{ seo.score }}/100</span>
+            </div>
+            <div class="card__body">
+              <ul class="insights-checklist">
+                @for (check of seo.checks; track check.label) {
+                  <li>
+                    <span class="insights-checklist__icon" [class.insights-checklist__icon--pass]="check.passed" [class.insights-checklist__icon--fail]="!check.passed">
+                      @if (check.passed) {
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+                      } @else {
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                      }
+                    </span>
+                    <span>
+                      <b>{{ check.label }}</b>
+                      <small>{{ check.detail }}</small>
+                    </span>
+                  </li>
+                }
+              </ul>
+              <p class="insights-note">On-page checks only — search ranking data needs a Search Console (or similar) integration, not yet connected.</p>
+            </div>
+          </div>
+        }
+
+        <div class="promo">
+          <span class="eyebrow">Heads up</span>
+          <p>Country data comes from a free IP-geolocation lookup and can't resolve local/private addresses — expect "no data" while testing from localhost.</p>
+        </div>
+      </div>
+    </div>
+  } @else if (loading()) {
+    <p class="insights-empty">Loading insights…</p>
+  }
+</section>

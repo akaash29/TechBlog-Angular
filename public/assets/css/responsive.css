@@ -1,0 +1,135 @@
+/* ============================================================
+   responsive.css — every breakpoint. Load this last.
+   ============================================================ */
+
+@media (max-width: 1280px) {
+  .msg { grid-template-columns: 292px minmax(0, 1fr); }
+  .msg__info { display: none; }
+}
+
+@media (max-width: 1160px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .grid2 { grid-template-columns: 1fr; }
+  .readgrid { grid-template-columns: 1fr; }
+  .rail { position: static; }
+  .profgrid { grid-template-columns: 1fr; }
+  .feature { grid-template-columns: 1fr; }
+  .feature__art { min-height: 240px; }
+}
+
+/* ---- sidebar becomes a drawer ---------------------------- */
+@media (max-width: 1024px) {
+  .side {
+    position: fixed;
+    left: 0; top: 0;
+    height: 100dvh;
+    transform: translateX(-100%);
+    transition: transform var(--med);
+    box-shadow: var(--sh-3);
+  }
+  .side.is-open { transform: none; }
+
+  .menubtn {
+    display: grid;
+    place-items: center;
+    width: 40px; height: 40px;
+    flex: none;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    cursor: pointer;
+  }
+
+  .topbar { padding: 0 18px; gap: 12px; }
+  .page { padding: 24px 18px 48px; }
+  .page--flush { padding: 0; }
+
+  .article__head, .prose { padding-left: 26px; padding-right: 26px; }
+}
+
+@media (max-width: 900px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth__stage {
+    padding: 26px 24px 30px;
+    gap: 26px;
+    min-height: auto;
+  }
+  .stage__mid h1 { font-size: 34px; }
+  .stage__mid h1 br { display: none; }
+  .stage__mid h1::after { margin-top: 16px; }
+  .levels { height: 52px; }
+  .stage__dial, .stage__scale { display: none; }
+  .auth__panel { padding: 30px 18px 50px; }
+  .authcard { padding: 30px 24px 26px; box-shadow: var(--sh-2); }
+  .authcard h2 { font-size: 27px; }
+}
+
+@media (max-width: 860px) {
+  .searchbar { display: none; }
+  .topbar h2 { font-size: 17px; }
+
+  /* messages: one pane at a time */
+  .msg { grid-template-columns: 1fr; }
+  .msg__thread { display: none; }
+  .msg.is-thread .msg__list { display: none; }
+  .msg.is-thread .msg__thread { display: flex; }
+  .thread__back {
+    display: grid;
+    place-items: center;
+    width: 36px; height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: var(--card);
+    cursor: pointer;
+  }
+  .thread__back svg { transform: rotate(180deg); }
+  .line { max-width: 88%; }
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 32px; }
+  .page__head h3 { font-size: 24px; }
+  .page__head { align-items: flex-start; flex-direction: column; gap: 14px; }
+
+  .stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat { padding: 16px; }
+  .stat__val { font-size: 27px; }
+
+  .row2 { grid-template-columns: 1fr; }
+  .postgrid { grid-template-columns: 1fr; }
+
+  .article__head, .prose, .article__foot { padding-left: 18px; padding-right: 18px; }
+  .prose p, .prose li { font-size: 16.5px; }
+  .prose p:first-of-type::first-letter { font-size: 52px; }
+  .comments__body, .comments__head { padding-left: 16px; padding-right: 16px; }
+
+  .profhead { gap: 16px; margin-top: -44px; }
+  .profhead__acts { margin-left: 0; width: 100%; }
+  .profhead__acts .btn { flex: 1; }
+  .av--xl { width: 84px; height: 84px; border-radius: 24px; font-size: 27px; }
+
+  .miniStats { grid-template-columns: 1fr; }
+  .miniStats > div { flex-direction: row; align-items: baseline; gap: 10px; }
+
+  .msg__scroll { padding: 18px 16px 6px; }
+  .composer { padding: 12px 14px 16px; }
+  .composer__hint { display: none; }
+  .msg__listhead { padding: 16px 14px 12px; }
+  .convos { padding: 6px; }
+
+  .toast { left: 16px; right: 16px; bottom: 18px; transform: translate(0, 26px); }
+  .toast.is-on { transform: translate(0, 0); }
+}
+
+@media (max-width: 420px) {
+  .stats { grid-template-columns: 1fr; }
+  .nowstats { grid-template-columns: 1fr 1fr; }
+  .infoacts { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* print: just the words */
+@media print {
+  .side, .topbar, .rail, .article__foot, .comments, .toast, .progress { display: none !important; }
+  .page { padding: 0; }
+  .article { border: 0; box-shadow: none; }
+}

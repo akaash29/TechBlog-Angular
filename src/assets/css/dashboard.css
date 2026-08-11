@@ -1,0 +1,180 @@
+/* ============================================================
+   dashboard.css — stat cards, the reads curve, trending
+   ============================================================ */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  position: relative;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--r3);
+  background: var(--card);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+  animation: statIn .55s var(--ease) both;
+  animation-delay: calc(var(--i) * 70ms);
+  transition: transform var(--med), box-shadow var(--med);
+}
+.stat:hover { transform: translateY(-3px); box-shadow: var(--sh-2); }
+@keyframes statIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.stat::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tone), transparent);
+  opacity: .5;
+}
+
+.stat__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.stat__ico {
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 13px;
+}
+.stat__val {
+  font-family: var(--display);
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat__lab {
+  margin-top: 7px;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+/* ====================== the reads curve ==================== */
+
+.chartwrap { position: relative; }
+
+.chart {
+  width: 100%;
+  height: 230px;
+  overflow: visible;
+}
+.gridline { stroke: var(--line-soft); stroke-width: 1; }
+.area { fill: url(#grad); }
+.line {
+  fill: none;
+  stroke: var(--tone);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+  animation: draw 1.7s var(--ease) .2s forwards;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.peak {
+  fill: var(--signal);
+  stroke: var(--card);
+  stroke-width: 3;
+  opacity: 0;
+  animation: popIn .4s var(--ease) 1.6s forwards;
+}
+@keyframes popIn { from { opacity: 0; } to { opacity: 1; } }
+
+.xaxis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  color: var(--dimmer);
+}
+
+/* ====================== trending card ====================== */
+
+.nowcard {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #E7EDE6;
+  overflow: hidden;
+  position: relative;
+}
+.nowcard::before {
+  content: "";
+  position: absolute;
+  inset: auto -30% -70% -30%;
+  height: 260px;
+  background: radial-gradient(50% 70% at 50% 100%, rgba(214,38,94,.4), transparent 70%);
+  filter: blur(30px);
+}
+.nowcard > * { position: relative; z-index: 1; }
+.nowcard .card__head { border-bottom-color: rgba(255,255,255,.09); }
+.nowcard h4 { color: #fff; }
+
+.nowbody { padding: 22px; }
+.nowbody h3 {
+  margin: 12px 0 6px;
+  font-size: 23px;
+  letter-spacing: -.028em;
+  color: #fff;
+}
+.nowbody h3 a { transition: color var(--fast); }
+.nowbody h3 a:hover { color: #FF8AAF !important; }
+.host {
+  margin: 0 0 20px;
+  font-size: 13.5px;
+  color: rgba(231,237,230,.6);
+}
+
+/* the live meter — same wave vocabulary as the sign-in stage */
+.nowmeter {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 46px;
+  margin-bottom: 16px;
+}
+.nowmeter i {
+  flex: 1;
+  border-radius: 99px;
+  background: linear-gradient(180deg, #FF8AAF, rgba(214,38,94,.25));
+  animation: bounce 1.4s var(--ease) infinite alternate;
+}
+
+.nowstats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.nowstats div { display: flex; flex-direction: column; gap: 2px; }
+.nowstats b {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: #fff;
+}
+.nowstats span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(231,237,230,.5);
+}

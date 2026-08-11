@@ -1,0 +1,91 @@
+<header class="topbar">
+  <h2>Pending approval</h2>
+  <div class="searchbar">
+    <svg width="17" height="17"><use href="#i-search"/></svg>
+    <input type="search" placeholder="Search posts, writers, tags">
+  </div>
+  <div class="topbar__right">
+    <button class="iconbtn" aria-label="Notifications"><svg width="19" height="19"><use href="#i-bell"/></svg><span class="dot"></span></button>
+  </div>
+</header>
+
+<section class="page" data-page="pending-approval">
+  <div class="page__head">
+    <div>
+      <h3>Awaiting review</h3>
+      <p><span>{{ posts().length }}</span> post{{ posts().length === 1 ? '' : 's' }} waiting on a decision.</p>
+    </div>
+  </div>
+
+  <div class="card" style="overflow:hidden">
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Post</th><th>Writer</th><th>Category</th><th>Submitted</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (post of posts(); track post.id) {
+            <tr>
+              <td>
+                <a class="byline" [routerLink]="['/post', post.id]" style="text-decoration:none;color:inherit">
+                  @if (post.coverImagePath) {
+                    <img class="av av--sm av--img" [src]="post.coverImagePath" alt="">
+                  } @else {
+                    <span class="av av--sm" style="background:#D6265E">{{ initials(post.title) }}</span>
+                  }
+                  <span>
+                    <b>{{ post.title || 'Untitled' }}</b><br>
+                    <small>{{ post.description || 'No standfirst yet.' }}</small>
+                  </span>
+                </a>
+              </td>
+              <td>
+                <div class="byline">
+                  @if (post.authorProfileImagePath) {
+                    <img class="av av--sm av--img" [src]="post.authorProfileImagePath" alt="">
+                  } @else {
+                    <span class="av av--sm" style="background:#2E7C6C">{{ initials(post.authorName) }}</span>
+                  }
+                  <span><b>{{ post.authorName }}</b></span>
+                </div>
+              </td>
+              <td><span class="badge">{{ post.categoryName }}</span></td>
+              <td>{{ post.createdDate | date:'MMM d, y, h:mm a' }}</td>
+              <td>
+                <div class="toolbar" style="gap:8px">
+                  <button
+                    type="button"
+                    class="btn btn--signal btn--sm"
+                    [disabled]="actingOnId() === post.id"
+                    (click)="approve(post)"
+                  >
+                    <svg width="15" height="15"><use href="#i-check"/></svg> Approve
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn--ghost btn--sm"
+                    [disabled]="actingOnId() === post.id"
+                    (click)="reject(post)"
+                  >
+                    <svg width="15" height="15"><use href="#i-x"/></svg> Reject
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (loading()) {
+      <div class="empty"><h4>Loading pending posts…</h4></div>
+    } @else if (!posts().length) {
+      <div class="empty">
+        <h4>Nothing waiting on you</h4>
+        <p style="margin:0">Every submitted post has been reviewed.</p>
+      </div>
+    }
+  </div>
+</section>

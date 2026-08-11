@@ -1,0 +1,44 @@
+<aside class="side">
+  <div class="brand">
+    <span class="brand__mark"><svg width="19" height="19"><use href="#i-wave"/></svg></span>
+    <span class="brand__name">Longwave</span>
+  </div>
+
+  <nav class="side__nav">
+    <span class="eyebrow side__label">Newsroom</span>
+    <a class="navitem" (click)="notBuiltYet()"><svg width="20" height="20"><use href="#i-grid"/></svg> Dashboard</a>
+    <a class="navitem" routerLink="/feed" routerLinkActive="is-on"><svg width="20" height="20"><use href="#i-feed"/></svg> Feed</a>
+    <a class="navitem" routerLink="/journal" routerLinkActive="is-on"><svg width="20" height="20"><use href="#i-tag"/></svg> Journal</a>
+    @if (currentUser(); as user) {
+      <a class="navitem" routerLink="/compose" routerLinkActive="is-on"><svg width="20" height="20"><use href="#i-edit"/></svg> Compose</a>
+      <a class="navitem" routerLink="/messages" routerLinkActive="is-on">
+        <svg width="20" height="20"><use href="#i-chat"/></svg> Messages
+        @if (unreadCount() > 0) {
+          <span class="pill">{{ unreadCount() }}</span>
+        }
+      </a>
+      <a class="navitem" routerLink="/members" routerLinkActive="is-on"><svg width="20" height="20"><use href="#i-users"/></svg> Members</a>
+      <a class="navitem" routerLink="/profile" routerLinkActive="is-on"><svg width="20" height="20"><use href="#i-id"/></svg> My profile</a>
+      @if (user.role === 'Admin') {
+        <a class="navitem" routerLink="/insights" routerLinkActive="is-on"><svg width="20" height="20"><use href="#i-eye"/></svg> Insights</a>
+        <a class="navitem" routerLink="/pending-approval" routerLinkActive="is-on"><svg width="20" height="20"><use href="#i-check"/></svg> Pending approval</a>
+      }
+    }
+  </nav>
+
+  <div class="side__foot">
+    @if (currentUser(); as user) {
+      <div class="sideuser">
+        @if (currentProfile()?.profileImagePath; as photo) {
+          <img class="av av--sm av--img" [src]="photo" alt="">
+        } @else {
+          <span class="av av--sm" style="background:#D6265E">{{ initials(user.userName) }}</span>
+        }
+        <span><b>{{ user.userName }}</b><span>{{ user.email }}</span></span>
+      </div>
+      <a class="navitem" (click)="signOut()"><svg width="20" height="20"><use href="#i-out"/></svg> Sign out</a>
+    } @else {
+      <a class="navitem" routerLink="/login"><svg width="20" height="20"><use href="#i-out"/></svg> Sign in</a>
+    }
+  </div>
+</aside>

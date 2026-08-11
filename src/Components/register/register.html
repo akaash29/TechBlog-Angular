@@ -1,0 +1,179 @@
+<div class="auth">
+  <div class="auth__stage">
+    <div class="brand">
+      <span class="brand__mark"><svg width="19" height="19"><use href="#i-wave"/></svg></span>
+      <span class="brand__name">Longwave</span>
+    </div>
+
+    <div class="stage__mid">
+      <span class="onair">Now taking new writers</span>
+      <h1>A magazine <br>written by the <br>people who read it.</h1>
+      <p>Join the writers' room for Longwave, an independent reader-funded magazine. Draft a piece, publish it, and watch how it lands.</p>
+
+      <ul class="stage__perks">
+        <li><span class="tick"><svg width="15" height="15"><use href="#i-check"/></svg></span> Publish straight to 12,000 subscribers</li>
+        <li><span class="tick"><svg width="15" height="15"><use href="#i-check"/></svg></span> An editor reads your first piece within a day</li>
+        <li><span class="tick"><svg width="15" height="15"><use href="#i-check"/></svg></span> Your own byline, profile and reader stats</li>
+      </ul>
+    </div>
+
+    <div class="stage__foot">
+      <div class="stage__stats">
+        <div><b>12,000</b><span>Readers</span></div>
+        <div><b>40</b><span>Writers</span></div>
+        <div><b>12</b><span>Issues a year</span></div>
+      </div>
+      <div class="levels" id="levels"></div>
+      <div class="ticks ticks--tall stage__dial"></div>
+      <div class="stage__scale"><span>Issue 01</span><span>04</span><span>07</span><span>10</span><span>Issue 12</span></div>
+    </div>
+  </div>
+
+  <div class="auth__panel">
+    <div class="authcard">
+
+      <div class="authswap is-on" id="viewRegister">
+        <div class="authcard__head">
+          <span class="authcard__mark"><svg width="21" height="21"><use href="#i-wave"/></svg></span>
+          <span class="eyebrow">Writers' room</span>
+        </div>
+        <h2>Create your account</h2>
+        <p class="authcard__sub">Takes about a minute. An editor reviews new writers within a day.</p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+
+          <div class="authgroup">
+            <p class="authgroup__label">About you</p>
+
+            <div class="row2">
+              <div class="field" [class.is-bad]="firstName.invalid && firstName.touched" [class.is-good]="firstName.valid && firstName.touched">
+                <div class="field__box">
+                  <input type="text" id="rgFirst" formControlName="firstName" placeholder=" " autocomplete="given-name">
+                  <label for="rgFirst">First name</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-user"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+                <p class="field__msg">
+                  @if (firstName.touched && firstName.hasError('required')) {
+                    Required.
+                  } @else if (firstName.touched && firstName.hasError('minlength')) {
+                    At least 2 characters.
+                  } @else {
+                    Required.
+                  }
+                </p>
+              </div>
+              <div class="field" [class.is-bad]="lastName.invalid && lastName.touched" [class.is-good]="lastName.valid && lastName.touched">
+                <div class="field__box">
+                  <input type="text" id="rgLast" formControlName="lastName" placeholder=" " autocomplete="family-name">
+                  <label for="rgLast">Last name</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-user"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+                <p class="field__msg">
+                  @if (lastName.touched && lastName.hasError('required')) {
+                    Required.
+                  } @else if (lastName.touched && lastName.hasError('minlength')) {
+                    At least 2 characters.
+                  } @else {
+                    Required.
+                  }
+                </p>
+              </div>
+            </div>
+
+            <div class="field" [class.is-bad]="handle.invalid && handle.touched" [class.is-good]="handle.valid && handle.touched">
+              <div class="field__box">
+                <input type="text" id="rgHandle" formControlName="handle" placeholder=" ">
+                <label for="rgHandle">Byline handle</label>
+                <span class="field__ico"><svg width="19" height="19"><use href="#i-at"/></svg></span>
+                <span class="field__sweep"></span>
+              </div>
+              <p class="field__msg">
+                @if (handle.touched && handle.hasError('required')) {
+                  Choose a handle.
+                } @else if (handle.touched && handle.hasError('minlength')) {
+                  At least 3 letters or numbers.
+                } @else {
+                  Pick a handle — letters and numbers only.
+                }
+              </p>
+            </div>
+
+            <div class="field" [class.is-bad]="role.invalid && role.touched" [class.is-good]="role.valid && role.touched">
+              <div class="field__box">
+                <select id="rgRole" formControlName="role">
+                  <option value=""></option>
+                  <option>Writer</option>
+                  <option>Editor</option>
+                  <option>Photographer</option>
+                  <option>Reader</option>
+                </select>
+                <label for="rgRole">What you'll do here</label>
+                <span class="field__ico"><svg width="19" height="19"><use href="#i-mic"/></svg></span>
+                <span class="field__sweep"></span>
+              </div>
+              <p class="field__msg">Choose one — you can change it later.</p>
+            </div>
+          </div>
+
+          <div class="authgroup">
+            <p class="authgroup__label">Sign-in details</p>
+
+            <div class="field" [class.is-bad]="email.invalid && email.touched" [class.is-good]="email.valid && email.touched">
+              <div class="field__box">
+                <input type="email" id="rgEmail" formControlName="email" placeholder=" " autocomplete="email">
+                <label for="rgEmail">Email address</label>
+                <span class="field__ico"><svg width="19" height="19"><use href="#i-mail"/></svg></span>
+                <span class="field__sweep"></span>
+              </div>
+              <p class="field__msg">
+                @if (email.touched && email.hasError('required')) {
+                  Email address is required.
+                } @else {
+                  That address doesn't look right.
+                }
+              </p>
+            </div>
+
+            <div class="field" [class.is-bad]="password.invalid && password.touched" [class.is-good]="password.valid && password.touched">
+              <div class="field__box">
+                <input type="password" id="rgPass" formControlName="password" placeholder=" " autocomplete="new-password">
+                <label for="rgPass">Password</label>
+                <span class="field__ico"><svg width="19" height="19"><use href="#i-lock"/></svg></span>
+                <button type="button" class="field__act" data-reveal="rgPass" aria-label="Show password"><svg width="19" height="19"><use href="#i-eye"/></svg></button>
+                <span class="field__sweep"></span>
+              </div>
+              <div class="meter" [attr.data-level]="passwordStrengthLevel()"><i></i><i></i><i></i><i></i><span>{{ passwordStrengthLabel() }}</span></div>
+              <p class="field__msg">
+                @if (password.touched && password.hasError('required')) {
+                  Password is required.
+                } @else {
+                  Use at least 8 characters.
+                }
+              </p>
+            </div>
+          </div>
+
+          <div class="formrow">
+            <label class="check"><input type="checkbox" formControlName="terms"> I accept the contributor guidelines</label>
+          </div>
+          @if (terms.touched && terms.invalid) {
+            <p style="margin: 7px 0 0 4px; font-size: 12.5px; color: var(--signal);">Accept the contributor guidelines to continue.</p>
+          }
+
+          <button class="btn btn--signal btn--wide" type="submit" [disabled]="submitting()" [style.opacity]="submitting() ? .7 : 1">
+            {{ submitting() ? 'Creating account…' : 'Create account' }} <span class="btn__arrow"><svg width="18" height="18"><use href="#i-arrow"/></svg></span>
+          </button>
+
+          <p class="formfine"><svg width="15" height="15"><use href="#i-lock"/></svg> No spam — one confirmation email, then you're in.</p>
+        </form>
+
+        <p class="swapline">Already a member? <a class="link" routerLink="/login" [queryParams]="loginQueryParams">Sign in</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><svg width="18" height="18"><use href="#i-check"/></svg><span id="toastMsg"></span></div>

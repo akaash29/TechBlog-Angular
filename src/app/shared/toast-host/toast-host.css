@@ -1,0 +1,128 @@
+:host {
+  display: contents;
+}
+
+.app-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 320px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 16px 14px 14px 16px;
+  border-radius: var(--r3);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--sh-3);
+  overflow: hidden;
+  transform: translate(-50%, 0);
+  animation: toast-in 0.38s var(--ease);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.app-toast__icon {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--tone-soft);
+  color: var(--tone);
+}
+
+.app-toast--error .app-toast__icon {
+  background: var(--signal-soft);
+  color: var(--signal);
+}
+
+.app-toast--info .app-toast__icon {
+  background: #fcefd9;
+  color: var(--amber-ink);
+}
+
+.app-toast__message {
+  flex: 1;
+  font-family: var(--body);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.app-toast__close {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--dimmer);
+  cursor: pointer;
+  transition: background var(--fast), color var(--fast);
+}
+.app-toast__close:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.app-toast__track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--line-soft);
+}
+
+.app-toast__bar {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: var(--tone);
+  animation-name: toast-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.app-toast--error .app-toast__bar {
+  background: var(--signal);
+}
+
+.app-toast--info .app-toast__bar {
+  background: var(--amber);
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-toast {
+    animation: none;
+  }
+  .app-toast__bar {
+    animation: none;
+  }
+}

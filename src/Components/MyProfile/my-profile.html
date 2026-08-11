@@ -1,0 +1,233 @@
+<header class="topbar">
+  <h2>My profile</h2>
+  <div class="searchbar">
+    <svg width="17" height="17"><use href="#i-search"/></svg>
+    <input type="search" placeholder="Search posts, writers, tags">
+  </div>
+  <div class="topbar__right">
+    <button class="iconbtn" aria-label="Notifications"><svg width="19" height="19"><use href="#i-bell"/></svg><span class="dot"></span></button>
+    <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> Write a post</button>
+  </div>
+</header>
+
+<section class="page" data-page="profile" [class.is-editing]="editing()">
+  <div class="cover">
+    <span class="cover__tag mono">{{ profile()?.role || '—' }}</span>
+    <div class="eq" id="profEq" aria-hidden="true"></div>
+  </div>
+
+  @if (profile(); as p) {
+    <div class="profhead">
+      <div class="profhead__row">
+        <div class="avwrap">
+          @if (p.profileImagePath) {
+            <img class="av av--xl av--img" [src]="p.profileImagePath" alt="{{ p.firstName }} {{ p.lastName }}'s profile photo">
+          } @else {
+            <span class="av av--xl" style="background:#D6265E">{{ initials() }}</span>
+          }
+          <button class="avedit" type="button" aria-label="Change photo" (click)="changePhoto()" [disabled]="uploadingPhoto()">
+            <svg width="16" height="16"><use href="#i-cam"/></svg>
+          </button>
+        </div>
+        <div class="profhead__acts">
+          <button type="button" class="btn btn--ghost btn--sm" (click)="toggleEditing()">
+            <svg width="16" height="16"><use [attr.href]="editing() ? '#i-x' : '#i-edit'"/></svg>
+            {{ editing() ? 'Stop editing' : 'Edit profile' }}
+          </button>
+          <button class="btn btn--primary btn--sm" routerLink="/compose"><svg width="16" height="16"><use href="#i-edit"/></svg> New post</button>
+        </div>
+      </div>
+      <div class="profhead__who">
+        <h3>{{ p.firstName }} {{ p.lastName }}</h3>
+        <div class="profhead__meta">
+          <span class="mono">&#64;{{ p.userName }}</span>
+          <span class="badge badge--editor">{{ p.role }}</span>
+          @if (p.city) {
+            <span class="metadot"><svg width="15" height="15"><use href="#i-pin"/></svg> {{ p.city }}</span>
+          }
+          <span class="metadot"><svg width="15" height="15"><use href="#i-cal"/></svg> Joined {{ p.createdAt | date:'MMM y' }}</span>
+          <span class="status" [class.status--on]="p.isActive" [class.status--off]="!p.isActive">{{ p.isActive ? 'Active' : 'Inactive' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="statstrip">
+    @if (statsLoading()) {
+      <div class="statcard"><b>—</b><span>Posts</span><small>Loading…</small></div>
+      <div class="statcard"><b>—</b><span>Reads</span><small>Loading…</small></div>
+      <div class="statcard"><b>—</b><span>Comments</span><small>Loading…</small></div>
+      <div class="statcard"><b>—</b><span>Likes</span><small>Loading…</small></div>
+    } @else if (stats(); as s) {
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-edit"/></svg></span>
+        <b>{{ s.posts.toLocaleString() }}</b><span>Posts</span>
+        <small>Published</small>
+      </div>
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-eye"/></svg></span>
+        <b>{{ s.reads.toLocaleString() }}</b><span>Reads</span>
+        <small>Across all posts</small>
+      </div>
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-chat"/></svg></span>
+        <b>{{ s.comments.toLocaleString() }}</b><span>Comments</span>
+        <small>Across all posts</small>
+      </div>
+      <div class="statcard">
+        <span class="statcard__ico"><svg width="18" height="18"><use href="#i-heart"/></svg></span>
+        <b>{{ s.likes.toLocaleString() }}</b><span>Likes</span>
+        <small>Across all posts</small>
+      </div>
+    }
+  </div>
+
+  <div class="profgrid">
+    <div class="profgrid__main">
+      <div class="card">
+        <div class="card__head"><h4>Your details</h4><span class="eyebrow" id="editHint">{{ editing() ? 'Editing' : 'Read only' }}</span></div>
+        <div class="card__body">
+          <form [formGroup]="form" (ngSubmit)="saveChanges()" novalidate>
+            <div class="row2">
+              <div class="field">
+                <div class="field__box">
+                  <input type="text" id="pfFirst" placeholder=" " formControlName="firstName">
+                  <label for="pfFirst">First name</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-user"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+                @if (firstName.invalid && firstName.touched) {
+                  <p class="field__msg">First name is required.</p>
+                }
+              </div>
+              <div class="field">
+                <div class="field__box">
+                  <input type="text" id="pfLast" placeholder=" " formControlName="lastName">
+                  <label for="pfLast">Last name</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-user"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+                @if (lastName.invalid && lastName.touched) {
+                  <p class="field__msg">Last name is required.</p>
+                }
+              </div>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <div class="field__box">
+                  <input type="email" id="pfEmail" placeholder=" " [value]="profile()?.email ?? ''" disabled>
+                  <label for="pfEmail">Email address</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-mail"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field__box">
+                  <input type="tel" id="pfPhone" placeholder=" " formControlName="phone">
+                  <label for="pfPhone">Phone</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-phone"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+                @if (phone.invalid && phone.touched) {
+                  <p class="field__msg">Enter a valid phone number.</p>
+                }
+              </div>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <div class="field__box">
+                  <input type="text" id="pfRole" placeholder=" " [value]="profile()?.role ?? ''" disabled>
+                  <label for="pfRole">Role</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-mic"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field__box">
+                  <input type="text" id="pfCity" placeholder=" " formControlName="city">
+                  <label for="pfCity">Based in</label>
+                  <span class="field__ico"><svg width="19" height="19"><use href="#i-pin"/></svg></span>
+                  <span class="field__sweep"></span>
+                </div>
+                @if (city.invalid && city.touched) {
+                  <p class="field__msg">City must be 100 characters or fewer.</p>
+                }
+              </div>
+            </div>
+
+            @if (editing()) {
+              <div class="formfoot" id="profileFoot">
+                <button type="button" class="btn btn--ghost btn--sm" (click)="cancelEditing()">Cancel</button>
+                <button type="submit" class="btn btn--signal btn--sm" [disabled]="saving()">
+                  <svg width="16" height="16"><use href="#i-check"/></svg> {{ saving() ? 'Saving…' : 'Save changes' }}
+                </button>
+              </div>
+            }
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__head">
+          <h4>Recent work</h4>
+          <a class="link" routerLink="/journal">View all posts</a>
+        </div>
+        <div class="card__body">
+          <div class="worklist" id="workList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profgrid__side">
+      <div class="card">
+        <div class="card__head"><h4>Reads this week</h4></div>
+        <div class="card__body activity">
+          @if (statsLoading()) {
+            <p class="activity__sub">Loading…</p>
+          } @else if (stats(); as s) {
+            <div class="activity__top"><span class="activity__num">{{ weekTotal().toLocaleString() }}</span></div>
+            <p class="activity__sub">Reads on your posts, last 7 days</p>
+            <div class="spark">
+              @for (day of s.readsThisWeek; track day.date) {
+                <i [style.height.%]="barHeightPercent(day.count)" [title]="day.count + ' reads'"></i>
+              }
+            </div>
+            <div class="spark__days">
+              @for (day of s.readsThisWeek; track day.date) {
+                <span>{{ dayLabel(day.date) }}</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__head"><h4>Your drafts</h4><span class="eyebrow">3 in progress</span></div>
+        <div class="card__body">
+          <ul class="draftlist">
+            <li>
+              <span class="draftlist__dot" style="background:rgba(214,38,94,.12);color:var(--signal)"><svg width="16" height="16"><use href="#i-edit"/></svg></span>
+              <span><b>Why the 4am bus route still runs</b><small>City · in review</small></span>
+            </li>
+            <li>
+              <span class="draftlist__dot" style="background:rgba(46,124,108,.12);color:var(--tone)"><svg width="16" height="16"><use href="#i-edit"/></svg></span>
+              <span><b>Three cooks, one shared kitchen</b><small>City · 1,400 words</small></span>
+            </li>
+            <li>
+              <span class="draftlist__dot" style="background:rgba(15,33,28,.07);color:var(--ink)"><svg width="16" height="16"><use href="#i-edit"/></svg></span>
+              <span><b>Untitled — notes on the river</b><small>Essays · outline</small></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="promo">
+        <span class="eyebrow">Writers' room</span>
+        <p>Working on a piece? Take it to the City desk and get an editor on it before Friday's running order.</p>
+        <button class="btn btn--signal btn--sm" (click)="notBuiltYet()"><svg width="15" height="15"><use href="#i-chat"/></svg> Message the desk</button>
+      </div>
+    </div>
+  </div>
+</section>

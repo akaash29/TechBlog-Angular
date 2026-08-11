@@ -1,0 +1,81 @@
+<div class="auth">
+  <div class="auth__stage">
+    <div class="brand">
+      <span class="brand__mark"><svg width="19" height="19"><use href="#i-wave"/></svg></span>
+      <span class="brand__name">Longwave</span>
+    </div>
+
+    <div class="stage__mid">
+      <span class="onair">New issue live</span>
+      <h1>A magazine<br>written by the<br>people who read it.</h1>
+      <p>The writers' room for Longwave, an independent reader-funded magazine. Draft a piece, publish it, and watch how it lands with 12,000 subscribers.</p>
+    </div>
+
+    <div class="stage__foot">
+      <div class="levels" id="levels"></div>
+      <div class="ticks ticks--tall stage__dial"></div>
+      <div class="stage__scale"><span>Issue 01</span><span>04</span><span>07</span><span>10</span><span>Issue 12</span></div>
+    </div></div>
+
+  <div class="auth__panel">
+    <div class="authcard">
+
+      <div class="authswap is-on" id="viewLogin">
+        <span class="eyebrow">Writers' room</span>
+        <h2>Sign in</h2>
+        <p class="authcard__sub">Your drafts are exactly where you left them.</p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="field" [class.is-bad]="email.invalid && email.touched" [class.is-good]="email.valid && email.touched">
+            <div class="field__box">
+              <input type="email" id="liEmail" formControlName="email" placeholder=" " autocomplete="email">
+              <label for="liEmail">Email address</label>
+              <span class="field__ico"><svg width="19" height="19"><use href="#i-mail"/></svg></span>
+              <span class="field__sweep"></span>
+            </div>
+            <p class="field__msg">
+              @if (email.touched && email.hasError('required')) {
+                Email address is required.
+              } @else if (email.touched && email.hasError('email')) {
+                That address doesn't look right.
+              } @else {
+                Enter the email you registered with.
+              }
+            </p>
+          </div>
+
+          <div class="field" [class.is-bad]="password.invalid && password.touched" [class.is-good]="password.valid && password.touched">
+            <div class="field__box">
+              <input type="password" id="liPass" formControlName="password" placeholder=" " autocomplete="current-password">
+              <label for="liPass">Password</label>
+              <span class="field__ico"><svg width="19" height="19"><use href="#i-lock"/></svg></span>
+              <button type="button" class="field__act" data-reveal="liPass" aria-label="Show password"><svg width="19" height="19"><use href="#i-eye"/></svg></button>
+              <span class="field__sweep"></span>
+            </div>
+            <p class="field__msg">
+              @if (password.touched && password.hasError('required')) {
+                Password is required.
+              } @else {
+                Passwords are at least 8 characters.
+              }
+            </p>
+          </div>
+
+          <div class="formrow">
+            <label class="check"><input type="checkbox" formControlName="keepSignedIn"> Keep me signed in</label>
+            <a class="link" href="#">Forgot password?</a>
+          </div>
+
+          <button class="btn btn--primary btn--wide" type="submit" [disabled]="submitting()" [style.opacity]="submitting() ? .7 : 1">
+            {{ submitting() ? 'Signing in…' : 'Sign in' }} <span class="btn__arrow"><svg width="18" height="18"><use href="#i-arrow"/></svg></span>
+          </button>
+        </form>
+
+        <p class="swapline">New here? <a class="link" routerLink="/register" [queryParams]="registerQueryParams">Create an account</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><svg width="18" height="18"><use href="#i-check"/></svg><span id="toastMsg"></span></div>
